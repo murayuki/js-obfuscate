@@ -4,7 +4,6 @@ const fs = require('fs')
 
 const args = process.argv.slice(2);
 const options = {};
-
 const obfuscateConfig = {
 	optionsPreset: "high-obfuscation",
 	target: "browser",
@@ -72,6 +71,26 @@ for (let i = 0; i < args.length; i++) {
   }
 }
 
+function formatDate() {
+	let now = new Date();
+	let year = now.getFullYear()
+	let month = (now.getMonth() + 1)
+	let date = now.getDate()
+	let hour = now.getHours()
+	let minute = now.getMinutes()
+	let second = now.getSeconds()
+	
+	let ap = "AM";
+    if (hour   > 11) { ap = "PM";             }
+    if (hour   > 12) { hour = hour - 12;      }
+	if (hour   == 0) { hour = 12;             }
+	if (hour   < 10) { hour   = "0" + hour;   }
+	if (minute < 10) { minute = "0" + minute; }
+	if (second < 10) { second = "0" + second; }
+	
+    return `${year}/${month}/${date} ${hour}:${minute}:${second} ${ap}`;
+}
+
 function obfuscate(targetPath, savePath) {
 	fs.readFile(targetPath, 'utf8', (err, data) => {
 		if (err) {
@@ -80,7 +99,9 @@ function obfuscate(targetPath, savePath) {
 		}
 
 		const obfuscationResult = JavaScriptObfuscator.obfuscate(data, obfuscateConfig)
-		fs.writeFile(savePath, obfuscationResult.getObfuscatedCode(), (err) => {
+		let time = formatDate()
+		let writeText = `// Make By Rz#9978 ${time}\n\n${obfuscationResult.getObfuscatedCode()}`
+		fs.writeFile(savePath, writeText, (err) => {
 		  if (err) {
 			//console.error('寫入文件時發生錯誤：', err);
 			return false
@@ -93,7 +114,6 @@ function obfuscate(targetPath, savePath) {
 	return true
 }
 
-
 function readFilesRecursively(targetPath, savePath) {
   const files = fs.readdirSync(targetPath);
 
@@ -103,7 +123,7 @@ function readFilesRecursively(targetPath, savePath) {
     const stat = fs.statSync(filePath);
     if (stat.isFile()) {
       if (path.extname(file) === '.js') {
-		console.log(obfuscate(filePath, savePath))
+		console.log(obfuscate(filePath, path.join(savePath, file)))
       }
     } else if (stat.isDirectory()) {
       readFilesRecursively(filePath, savePath);
@@ -116,4 +136,3 @@ function start() {
 }
 
 start()
-
