@@ -5,8 +5,8 @@
 * 並且用作於 Rz_ZipTools 更新/下載 js-obfuscate
 
 ## 依賴
-* node.js
-  * javascript-obfuscator
+* nodejs ( [前往](https://nodejs.org/en) )
+  * javascript-obfuscator ( [線上](https://obfuscator.io/) | [Github](https://github.com/javascript-obfuscator/javascript-obfuscator) )
 
 ## 使用
 * [Releases](https://github.com/murayuki/js-obfuscate/releases) 下載最新版本
