@@ -41,7 +41,7 @@ const obfuscateConfig = {
 	reservedStrings: [],
 	identifierNamesGenerator: 'mangled',
 	identifiersDictionary: [],
-	identifiersPrefix: 'RzDev_',
+	identifiersPrefix: 'RzDev',
 	renameGlobals: true,
 	renameProperties: false,
 	renamePropertiesMode: 'safe',
@@ -91,12 +91,15 @@ function formatDate() {
     return `${year}/${month}/${date} ${hour}:${minute}:${second} ${ap}`;
 }
 
-function obfuscate(targetPath, savePath) {
+function obfuscate(targetPath, savePath, isNode) {
 	fs.readFile(targetPath, 'utf8', (err, data) => {
 		if (err) {
 			//console.error('讀取檔案時發生錯誤：', err)
 			return false
 		}
+		
+		let _isNode = (isNode === "1") ? true : false;
+		obfuscateConfig.target = (_isNode != undefined && _isNode == true) ? "node" : "browser"
 
 		const obfuscationResult = JavaScriptObfuscator.obfuscate(data, obfuscateConfig)
 		let time = formatDate()
@@ -114,7 +117,7 @@ function obfuscate(targetPath, savePath) {
 	return true
 }
 
-function readFilesRecursively(targetPath, savePath) {
+function readFilesRecursively(targetPath, savePath, isNode) {
   const files = fs.readdirSync(targetPath);
 
   files.forEach((file) => {
@@ -123,7 +126,7 @@ function readFilesRecursively(targetPath, savePath) {
     const stat = fs.statSync(filePath);
     if (stat.isFile()) {
       if (path.extname(file) === '.js') {
-		console.log(obfuscate(filePath, path.join(savePath, file)))
+		console.log(obfuscate(filePath, path.join(savePath, file), isNode))
       }
     } else if (stat.isDirectory()) {
       readFilesRecursively(filePath, savePath);
@@ -132,7 +135,7 @@ function readFilesRecursively(targetPath, savePath) {
 }
 
 function start() {
-	readFilesRecursively(options["targetPath"], options["savePath"]);
+	readFilesRecursively(options["targetPath"], options["savePath"], options["isNode"]);
 }
 
 start()
