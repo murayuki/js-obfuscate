@@ -124,11 +124,12 @@ function readFilesRecursively(targetPath, savePath, isNode) {
     const filePath = path.join(targetPath, file);
 
     const stat = fs.statSync(filePath);
+	
     if (stat.isFile()) {
-      if (path.extname(file) === '.js') {
+	  if (path.extname(file) === '.js') {
 		console.log(obfuscate(filePath, path.join(savePath, file), isNode))
       }
-    } else if (stat.isDirectory()) {
+    } else if (stat.isDirectory() && file !== 'node_modules') {
       readFilesRecursively(filePath, savePath);
     }
   });
