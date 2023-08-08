@@ -11,6 +11,6 @@
 ## 使用
 * [Releases](https://github.com/murayuki/js-obfuscate/releases) 下載最新版本
 * 解壓目錄執行 `npm install` 或 `pnpm install`
-* ```node obfuscate.js --targetPath 搜尋目錄 --savePath 保存路徑```
+* ```node obfuscate.js --targetPath 搜尋目錄 --savePath 保存路徑 --isNode 0/1(決定目標環境)```
 
 #### 備註: 基於 https://obfuscator.io/ 依賴進行的 js-obfuscate
